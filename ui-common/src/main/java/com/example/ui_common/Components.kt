@@ -3,46 +3,48 @@ package com.example.ui_common
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.ui_common.theme.Teal200
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier.fillMaxSize()) {
+fun MainScreen(modifier: Modifier = Modifier.fillMaxSize(), action: ((UiAction) -> Unit)?) {
     Surface(
         modifier = modifier,
         color = MaterialTheme.colors.background
     ) {
-        StatefulCounter()
+        StatefulCounter(action = action)
     }
 }
 
 @Composable
-fun StatefulCounter(modifier: Modifier = Modifier) {
-    var count by remember { mutableStateOf(0) }
+fun StatefulCounter(modifier: Modifier = Modifier, action: ((UiAction) -> Unit)?) {
     StatelessCounter(
-        count = count,
-        onIncrement = { count++ },
+        onClick = action,
         modifier = modifier
     )
 }
 
 @Composable
-fun StatelessCounter(count: Int, onIncrement: () -> Unit, modifier: Modifier = Modifier) {
+fun StatelessCounter( onClick: ((UiAction) -> Unit)?, modifier: Modifier = Modifier) {
     Column(modifier = modifier.padding(16.dp)) {
-        if (count > 0) {
-            Text("You've had $count glasses.")
-        }
         Button(
             colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFFBB86FC)),
-            onClick = onIncrement,
-            enabled = count < 10,
+            onClick =  { onClick?.invoke(UiAction.OK) } ,
             modifier = Modifier.padding(top = 8.dp)
         ) {
             Text("Add one")
         }
     }
+}
+
+@Composable
+fun HelloWorldScreen() {
+    Text(text = "HelloWorld")
 }
